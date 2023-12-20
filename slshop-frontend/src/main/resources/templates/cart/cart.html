@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+  th:replace="~{layouts/base :: layout(~{::title}, ~{}, ~{}, ~{::body/content()})}"
+>
+<head>
+<meta charset="UTF-8">
+<title>商品カート</title>
+</head>
+<body>
+<h1>テスト</h1>
+<table>
+	<thead>
+		<tr>
+			<th>I</th>
+			<th>C</th>
+			<th>P</th>
+			<th>Q</th>
+		</tr>
+	</thead>
+		<tbody>
+			<tr th:each="item":cartItem>
+				<td th:text="${item.id}"></td>
+				<td th:text="${item.customer}"></td>
+				<td th:text="${item.product}"></td>
+				<td th:text="${item.quantity}"></td>
+			</tr>
+		</tbody>
+</table>
+</body>
+</html>
