@@ -9,9 +9,29 @@
 		type="com.slshop.common.entity.CartItem">
 		<id column="ID" property="id" />
 		<result column="QUANTITY" property="quantity" />
+
+		<association property="product"
+			javaType="com.slshop.common.entity.product.Product">
+			<id column="P_ID" property="id" />
+			<result column="NAME" property="name" />
+			<result column="DESCRIPTION" property="description" />
+			<result column="IMAGE" property="image" />
+			<result column="PRICE" property="price" />
+			<result column="LENGTH" property="length" />
+			<result column="WIDTH" property="width" />
+			<result column="HEIGHT" property="height" />
+			<result column="WEIGHT" property="weight" />
+		</association>
+
 	</resultMap>
 	<select id="findAll" resultMap="cartMap">
 		SELECT * FROM CART_ITEMS
 	</select>
+
+	<insert id="insert" useGeneratedKeys="true" keyColumn="ID"
+		>
+		INSERT INTO CART_ITEMS (ID,QUANTITY) VALUES
+		(CART_ITEMS_ID_SEQ.nextval,#{quantity})
+	</insert>
 
 </mapper>

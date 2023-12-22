@@ -31,11 +31,10 @@
 						<button type="button" class="btn btn-secondary" id="btnu">
 							<i class="bi bi-plus"></i>
 						</button>
-						<a th:href="@{/cart}" button class="btn btn-outline-primary flex-shrink-0 ms-4" type="button">
+						<button class="btn btn-outline-primary flex-shrink-0 ms-4" type="button" id="cartBtn">
 							<i class="bi-cart-fill me-1"></i>
 							カートに追加
-						</a>
-						</button>
+						</butto>
 					</div>
 				</div>
 			</div>
@@ -72,13 +71,17 @@
 			var currentQuantity = parseInt(quantityField.value);
 			var newQuantity = currentQuantity + change;
 
-			// Ensure quantity is not negative
 			if (newQuantity >= 1 && newQuantity <= 10) {
 				quantityField.value = newQuantity;
 			}
-
 		}
 		
+		document.getElementById('cartBtn').addEventListener('click',function(){
+			
+			let cartUrl = '/slshop/cart/insert/' + parseInt(document.getElementById('quantity').value);
+			
+			window.location.href = cartUrl;
+		});
 		
 	</script>
 

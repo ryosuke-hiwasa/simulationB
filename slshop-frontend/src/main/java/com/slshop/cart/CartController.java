@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.slshop.common.entity.CartItem;
@@ -29,8 +28,8 @@ public class CartController {
 		return "cart/cart";
 	}
 	
-	@PostMapping("/insert/{id}")
-	public String insert(@PathVariable Integer quantity) {
+	@GetMapping("/insert/{quantity}")
+	public String insert(@PathVariable("quantity") Integer quantity) {
 		this.cartService.insert(quantity);
 		return "redirect:/cart";
 	}
