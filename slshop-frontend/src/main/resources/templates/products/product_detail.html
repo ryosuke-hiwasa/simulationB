@@ -22,20 +22,22 @@
 					<p class="lead mb-5">
 						[[${product.description}]]
 					</p>
-					<div class="d-flex input-group">
-						<button type="button" class="btn btn-secondary" id="btnd">
-							<i class="bi bi-dash"></i>
-						</button>
-						<input type="number" class="form-control text-center" readonly style="max-width: 3rem" value="1"
-							id="quantity" />
-						<button type="button" class="btn btn-secondary" id="btnu">
-							<i class="bi bi-plus"></i>
-						</button>
-						<button class="btn btn-outline-primary flex-shrink-0 ms-4" type="button" id="cartBtn">
-							<i class="bi-cart-fill me-1"></i>
-							カートに追加
-						</butto>
-					</div>
+					<form th:action="@{/detail/{productId}(id=${product.id})}" th:method="post">
+						<div class="d-flex input-group">
+							<button type="button" class="btn btn-secondary" id="btnD">
+								<i class="bi bi-dash"></i>
+							</button>
+							<input type="number" class="form-control text-center" readonly style="max-width: 3rem"
+								value="1" id="quantity" />
+							<button type="button" class="btn btn-secondary" id="btnU">
+								<i class="bi bi-plus"></i>
+							</button>
+							<button class="btn btn-outline-primary flex-shrink-0 ms-4" type="submit">
+								<i class="bi-cart-fill me-1"></i>
+								カートに追加
+							</button>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -58,11 +60,11 @@
 	<th:block th:replace="~{layouts/modal_fragments :: messageModal}" />
 
 	<script type="text/javascript">
-		document.getElementById('btnd').addEventListener('click', function () {
+		document.getElementById('btnD').addEventListener('click', function () {
 			updateQuantity(-1);
 		});
 
-		document.getElementById('btnu').addEventListener('click', function () {
+		document.getElementById('btnU').addEventListener('click', function () {
 			updateQuantity(1);
 		});
 
@@ -75,16 +77,7 @@
 				quantityField.value = newQuantity;
 			}
 		}
-		
-		document.getElementById('cartBtn').addEventListener('click',function(){
-			
-			let cartUrl = '/slshop/cart/insert/' + parseInt(document.getElementById('quantity').value);
-			
-			window.location.href = cartUrl;
-		});
-		
 	</script>
-
 </body>
 
 </html>

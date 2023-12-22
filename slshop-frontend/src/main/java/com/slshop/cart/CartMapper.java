@@ -11,7 +11,7 @@ import com.slshop.common.entity.product.Product;
 @Mapper
 public interface CartMapper {
 	public List<CartItem> findAll();
-	public void insert(Integer quantity);
+	public void insert(Integer productId,int quantity);
 	public Product getProduct();
 	public Customer getCustomer();
 	
