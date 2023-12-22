@@ -8,8 +8,6 @@
 	<resultMap id="cartMap"
 		type="com.slshop.common.entity.CartItem">
 		<id column="ID" property="id" />
-		<result column="CUSTOMER_ID" property="customer" />
-		<result column="PRODUCT_ID" property="product" />
 		<result column="QUANTITY" property="quantity" />
 	</resultMap>
 	<select id="findAll" resultMap="cartMap">
