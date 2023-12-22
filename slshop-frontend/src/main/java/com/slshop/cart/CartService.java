@@ -19,4 +19,8 @@ public class CartService {
 	public List<CartItem> findAll(){
 		return cartMapper.findAll();
 	}
+	
+	public void insert(int quantity) {
+		this.cartMapper.insert(quantity);
+	};
 }

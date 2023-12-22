@@ -9,5 +9,5 @@ import com.slshop.common.entity.CartItem;
 @Mapper
 public interface CartMapper {
 	public List<CartItem> findAll();
-	
+	public void insert(Integer quantity);
 }
