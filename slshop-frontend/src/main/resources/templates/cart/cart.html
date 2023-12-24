@@ -22,6 +22,8 @@
 		<tbody>
 			<tr th:each="item : ${cartItem}">
 				<td th:text="${item.id}"></td>
+				<td></td>
+				<td th:text="${item.productId}"></td>
 				<td th:text="${item.quantity}"></td>
 			</tr>
 		</tbody>
