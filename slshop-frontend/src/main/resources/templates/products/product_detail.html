@@ -22,13 +22,13 @@
 					<p class="lead mb-5">
 						[[${product.description}]]
 					</p>
-					<form th:action="@{/detail/{productId}(id=${product.id})}" th:method="post">
+					<form th:action="@{/products/detail/{id}(id=${product.id})}" th:method="post">
 						<div class="d-flex input-group">
 							<button type="button" class="btn btn-secondary" id="btnD">
 								<i class="bi bi-dash"></i>
 							</button>
 							<input type="number" class="form-control text-center" readonly style="max-width: 3rem"
-								value="1" id="quantity" />
+								value="1" id="quantity" name="quantity" />
 							<button type="button" class="btn btn-secondary" id="btnU">
 								<i class="bi bi-plus"></i>
 							</button>
@@ -37,6 +37,7 @@
 								カートに追加
 							</button>
 						</div>
+						<input type="hidden" name="quantity" th:value="${quantity}" />
 					</form>
 				</div>
 			</div>

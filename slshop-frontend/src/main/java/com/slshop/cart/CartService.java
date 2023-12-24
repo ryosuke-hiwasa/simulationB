@@ -10,17 +10,17 @@ import com.slshop.common.entity.CartItem;
 @Service
 public class CartService {
 	private final CartMapper cartMapper;
-	
+
 	@Autowired
 	public CartService(CartMapper cartMapper) {
 		this.cartMapper = cartMapper;
 	}
-	
-	public List<CartItem> findAll(){
+
+	public List<CartItem> findAll() {
 		return cartMapper.findAll();
 	}
-	
-	public void insert(int quantity,Integer productId) {
-		this.cartMapper.insert(productId,quantity);
+
+	public void insert(Integer customerId,Integer productId, int quantity) {
+		this.cartMapper.insert(customerId,productId, quantity);
 	};
 }
