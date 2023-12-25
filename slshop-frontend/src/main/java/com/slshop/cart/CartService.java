@@ -20,7 +20,7 @@ public class CartService {
 		return cartMapper.findAll();
 	}
 
-	public void insert(Integer customerId,Integer productId, int quantity) {
+	public void insert(Long customerId,Integer productId, int quantity) {
 		this.cartMapper.insert(customerId,productId, quantity);
 	};
 }

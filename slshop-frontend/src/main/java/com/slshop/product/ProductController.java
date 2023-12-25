@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.slshop.cart.CartService;
 import com.slshop.common.entity.CartItem;
+import com.slshop.common.entity.Customer;
 import com.slshop.common.entity.product.Product;
 
 @Controller
@@ -49,7 +50,8 @@ public class ProductController {
 	public String addCart(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("id") Integer productid,
 			@RequestParam("quantity") int quantity,Model model) {
 		Integer test =10;
-		this.cartService.insert(test,productid, quantity);
+		
+		this.cartService.insert(((Customer)userDetails).getId(),productid, quantity);
 		List<CartItem> cartItem = this.cartService.findAll();
 		model.addAttribute("cartItem",cartItem);
 		return "/cart/cart";
