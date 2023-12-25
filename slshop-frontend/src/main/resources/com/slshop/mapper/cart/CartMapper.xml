@@ -36,17 +36,35 @@
 	</resultMap>
 	<select id="findAll" resultMap="cartMap">
 		SELECT * FROM CART_ITEMS
+		WHERE
+		CUSTOMER_ID = #{customerId}
 	</select>
 
-	<insert id="insert" useGeneratedKeys="true" keyColumn="ID">
-		INSERT
-		INTO
-		CART_ITEMS
-		(ID,CUSTOMER_ID,
-		PRODUCT_ID,QUANTITY)
+	<!-- 既にアイテムが存在するか確認するSQLクエリ -->
+	<select id="checkItem" resultType="boolean" parameterType="map">
+    SELECT CASE WHEN EXISTS (
+        SELECT 1
+        FROM CART_ITEMS
+        WHERE CUSTOMER_ID = #{customerId} AND PRODUCT_ID = #{productId}
+    ) THEN 1 ELSE 0 END
+    FROM DUAL
+	</select>
+
+	<!-- アイテムが存在する場合は数量を増やすSQLクエリ -->
+	<update id="update" parameterType="map">
+		UPDATE CART_ITEMS
+		SET QUANTITY = QUANTITY + #{quantity}
+		WHERE CUSTOMER_ID = #{customerId}
+		AND PRODUCT_ID = #{productId}
+	</update>
+
+	<!-- アイテムが存在しない場合は新しく追加するSQLクエリ -->
+	<insert id="insert" useGeneratedKeys="true" keyColumn="ID"
+		parameterType="map">
+		INSERT INTO CART_ITEMS
+		(ID, CUSTOMER_ID, PRODUCT_ID, QUANTITY)
 		VALUES
-		(CART_ITEMS_ID_SEQ.nextval, #{customerId},
-		#{productId},#{quantity})
+		(CART_ITEMS_ID_SEQ.nextval, #{customerId}, #{productId}, #{quantity})
 	</insert>
 
 	<delete id="deleteById">

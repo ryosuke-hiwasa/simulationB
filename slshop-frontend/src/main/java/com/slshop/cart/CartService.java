@@ -16,18 +16,22 @@ public class CartService {
 		this.cartMapper = cartMapper;
 	}
 
-	public List<CartItem> findAll() {
-		return cartMapper.findAll();
+	public List<CartItem> findAll(Long customerId) {
+		return cartMapper.findAll(customerId);
 	}
 
-	public void insert(Long customerId,Integer productId, int quantity) {
+	public void insert(Long customerId,Long productId, int quantity) {
 		this.cartMapper.insert(customerId,productId, quantity);
 	};
 	
-//	public boolean cartCheck(Long customerId,Integer productId) {
-//		
-//		return this.cartMapper.cartCheck(customerId, productId);
-//	}
+	public void update(Long customerId,Long productId, int quantity) {
+		this.cartMapper.update(customerId,productId, quantity);
+	};
+	
+	public boolean checkItem(Long customerId,Long productId) {
+		
+		return this.cartMapper.checkItem(customerId, productId);
+	}
 	
 	public void delete(Integer id) {
 		this.cartMapper.deleteById(id);

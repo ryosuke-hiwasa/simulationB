@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.slshop.cart.CartService;
-import com.slshop.common.entity.CartItem;
 import com.slshop.common.entity.product.Product;
 import com.slshop.security.CustomerUserDetails;
 
@@ -46,13 +45,13 @@ public class ProductController {
 	}
 
 	@PostMapping("/detail/{id}")
-	public String addCart(@AuthenticationPrincipal CustomerUserDetails userDetails, @PathVariable("id") Integer productid,
-			@RequestParam("quantity") int quantity,Model model) {
-		Integer test =10;
-		this.cartService.insert(userDetails.getId(),productid, quantity);
-		
-		List<CartItem> cartItem = this.cartService.findAll();
-		model.addAttribute("cartItem",cartItem);
-		return "/cart/cart";
+	public String addCart(@AuthenticationPrincipal CustomerUserDetails userDetails,@PathVariable("id") Long productid,
+			@RequestParam("quantity") int quantity) {
+		if(!this.cartService.checkItem(userDetails.getId(),productid)) {
+			this.cartService.insert(userDetails.getId(),productid, quantity);
+		}else {
+			this.cartService.update(userDetails.getId(),productid, quantity);
+		}
+		return "redirect:/cart";
 	}
 }
