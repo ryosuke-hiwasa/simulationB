@@ -9,6 +9,10 @@
 
 <body>
 	<h1>テスト</h1>
+
+	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+		Launch demo modal
+	</button>
 	<table>
 		<thead>
 			<tr>
@@ -27,12 +31,66 @@
 					</form>
 				</td>
 				<td th:text="${item.id}"></td>
-				<td th:text="${item.customerId}"></td>
-				<td th:text="${item.productId}"></td>
-				<td th:text="${item.quantity}"></td>
+				<td>
+					<form th:action="@{/cart/update/{id}(id=${item.productId})}" th:method="post">
+						<div class="d-flex input-group">
+							<button type="button" class="btn btn-secondary" id="btnD">
+								<i class="bi bi-dash"></i>
+							</button>
+							<input type="number" class="form-control text-center" readonly style="max-width: 3rem"
+								th:value="${item.quantity}" id="quantity" name="quantity" />
+							<button type="button" class="btn btn-secondary" id="btnU">
+								<i class="bi bi-plus"></i>
+							</button>
+							<button class="btn btn-outline-primary flex-shrink-0 ms-4" type="submit">
+								<i class="bi-cart-fill me-1"></i>
+								カートに追加
+							</button>
+						</div>
+						<input type="hidden" name="quantity" th:value="${item.quantity}" />
+					</form>
+				</td>
 			</tr>
 		</tbody>
 	</table>
+	<script type="text/javascript">
+		document.getElementById('btnD').addEventListener('click', function () {
+			updateQuantity(-1);
+		});
+
+		document.getElementById('btnU').addEventListener('click', function () {
+			updateQuantity(1);
+		});
+
+		function updateQuantity(change) {
+			var quantityField = document.getElementById('quantity');
+			var currentQuantity = parseInt(quantityField.value);
+			var newQuantity = currentQuantity + change;
+
+			if (newQuantity >= 1 && newQuantity <= 10) {
+				quantityField.value = newQuantity;
+			}
+		}
+	</script>
+
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p th:text="${message}"></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 
 </html>

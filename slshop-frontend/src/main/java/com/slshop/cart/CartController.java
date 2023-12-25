@@ -7,9 +7,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.slshop.common.entity.CartItem;
 import com.slshop.security.CustomerUserDetails;
@@ -25,15 +27,24 @@ public class CartController {
 	}
 	
 	@GetMapping
-	public String viewCart(Model model,@AuthenticationPrincipal CustomerUserDetails userDetails) {
+	public String viewCart(Model model,@AuthenticationPrincipal CustomerUserDetails userDetails,@ModelAttribute("message") String message) {
 		List<CartItem> cartItem = this.cartService.findAll(userDetails.getId());
 		model.addAttribute("cartItem",cartItem);
+		
 		return "cart/cart";
 	}
 	
 	@PostMapping("/delete/{id}")
 	public String delete(@PathVariable Integer id) {
 		cartService.delete(id);
+		return "redirect:/cart";
+	}
+	
+	@PostMapping("/update/{id}")
+	public String update(@AuthenticationPrincipal CustomerUserDetails userDetails,@PathVariable("id") Long productid,
+			@RequestParam("quantity") int quantity) {
+
+		this.cartService.addQuan(userDetails.getId(),productid, quantity);
 		return "redirect:/cart";
 	}
 }

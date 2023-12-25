@@ -16,5 +16,5 @@ public interface CartMapper {
 	public Customer getCustomer();
 	public void deleteById(Integer id);
 	public boolean checkItem(Long customerId,Long productId);
-	public void update(Long customerId,Long productId,int quantity);
+	public void addQuan(Long customerId,Long productId,int quantity);
 }

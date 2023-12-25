@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.slshop.cart.CartService;
 import com.slshop.common.entity.product.Product;
@@ -46,12 +47,13 @@ public class ProductController {
 
 	@PostMapping("/detail/{id}")
 	public String addCart(@AuthenticationPrincipal CustomerUserDetails userDetails,@PathVariable("id") Long productid,
-			@RequestParam("quantity") int quantity) {
+			@RequestParam("quantity") int quantity,RedirectAttributes ra) {
 		if(!this.cartService.checkItem(userDetails.getId(),productid)) {
 			this.cartService.insert(userDetails.getId(),productid, quantity);
 		}else {
-			this.cartService.update(userDetails.getId(),productid, quantity);
+			this.cartService.addQuan(userDetails.getId(),productid, quantity);
 		}
+		ra.addFlashAttribute("message","カートに商品を追加しました"+quantity+"個");
 		return "redirect:/cart";
 	}
 }

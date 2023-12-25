@@ -24,8 +24,8 @@ public class CartService {
 		this.cartMapper.insert(customerId,productId, quantity);
 	};
 	
-	public void update(Long customerId,Long productId, int quantity) {
-		this.cartMapper.update(customerId,productId, quantity);
+	public void addQuan(Long customerId,Long productId, int quantity) {
+		this.cartMapper.addQuan(customerId,productId, quantity);
 	};
 	
 	public boolean checkItem(Long customerId,Long productId) {

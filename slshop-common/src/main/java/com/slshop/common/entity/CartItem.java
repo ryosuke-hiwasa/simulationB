@@ -41,16 +41,16 @@ public class CartItem {
         this.product = product;
     }
 
-    public Customer getCustomerId() {
-        return customer;
+    public Integer getCustomerId() {
+        return customerId;
     }
 
     public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
     }
 
-    public Product getProductId() {
-        return product;
+    public Integer getProductId() {
+        return productId;
     }
 
     public void setProductId(Integer productId) {
