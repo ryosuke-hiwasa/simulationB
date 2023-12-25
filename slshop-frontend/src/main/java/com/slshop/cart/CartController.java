@@ -41,10 +41,16 @@ public class CartController {
 	}
 	
 	@PostMapping("/update/{id}")
-	public String update(@AuthenticationPrincipal CustomerUserDetails userDetails,@PathVariable("id") Long productid,
+	public String update(@AuthenticationPrincipal CustomerUserDetails userDetails,@PathVariable("id") Long productId,
 			@RequestParam("quantity") int quantity) {
-
-		this.cartService.addQuan(userDetails.getId(),productid, quantity);
+		if(this.cartService.getQuantity(productId)+quantity<10) {
+			this.cartService.addQuan(userDetails.getId(),productId, quantity);
+		}else {
+			this.cartService.updateQuan(userDetails.getId(),productId, quantity);
+		}
+		
 		return "redirect:/cart";
 	}
+	
+	
 }

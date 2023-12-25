@@ -28,6 +28,10 @@ public class CartService {
 		this.cartMapper.addQuan(customerId,productId, quantity);
 	};
 	
+	public void updateQuan(Long customerId,Long productId, int quantity) {
+		this.cartMapper.updateQuan(customerId,productId, quantity);
+	};
+	
 	public boolean checkItem(Long customerId,Long productId) {
 		
 		return this.cartMapper.checkItem(customerId, productId);
@@ -35,6 +39,10 @@ public class CartService {
 	
 	public void delete(Integer id) {
 		this.cartMapper.deleteById(id);
+	}
+	
+	public int getQuantity(Long productId) {
+		return this.cartMapper.getQuantity(productId);
 	}
 	
 }

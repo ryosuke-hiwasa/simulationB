@@ -46,14 +46,23 @@ public class ProductController {
 	}
 
 	@PostMapping("/detail/{id}")
-	public String addCart(@AuthenticationPrincipal CustomerUserDetails userDetails,@PathVariable("id") Long productid,
-			@RequestParam("quantity") int quantity,RedirectAttributes ra) {
-		if(!this.cartService.checkItem(userDetails.getId(),productid)) {
-			this.cartService.insert(userDetails.getId(),productid, quantity);
-		}else {
-			this.cartService.addQuan(userDetails.getId(),productid, quantity);
+	public String addCart(@AuthenticationPrincipal CustomerUserDetails userDetails, @PathVariable("id") Long productId,
+			@RequestParam("quantity") int quantity, RedirectAttributes ra) {
+
+		if (this.cartService.getQuantity(productId) <= 0) {
+			this.cartService.insert(userDetails.getId(), productId, quantity);
 		}
-		ra.addFlashAttribute("message","カートに商品を追加しました"+quantity+"個");
+
+		if (this.cartService.getQuantity(productId) + quantity < 10) {
+			ra.addFlashAttribute("message",
+					"カートに商品を追加できませんでした｡最大数量は10個です(カート内:" + this.cartService.getQuantity(productId) + "個)");
+			return "redirect:/cart";
+		}
+
+		if (this.cartService.checkItem(userDetails.getId(), productId)) {
+			this.cartService.addQuan(userDetails.getId(), productId, quantity);
+		}
+		ra.addFlashAttribute("message", "カートに商品を追加しました(" + quantity + ")個");
 		return "redirect:/cart";
 	}
 }

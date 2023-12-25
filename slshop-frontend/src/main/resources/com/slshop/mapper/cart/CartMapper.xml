@@ -40,31 +40,49 @@
 		CUSTOMER_ID = #{customerId}
 	</select>
 
-	<!-- 既にアイテムが存在するか確認するSQLクエリ -->
-	<select id="checkItem" resultType="boolean" parameterType="map">
-    SELECT CASE WHEN EXISTS (
-        SELECT 1
-        FROM CART_ITEMS
-        WHERE CUSTOMER_ID = #{customerId} AND PRODUCT_ID = #{productId}
-    ) THEN 1 ELSE 0 END
-    FROM DUAL
+	<select id="getQuantity" resultMap="cartMap" resultType="int">
+		SELECT QUANTITY FROM CART_ITEMS
+		WHERE
+		CUSTOMER_ID = #{customerId}
 	</select>
 
-	<!-- アイテムが存在する場合は数量を増やすSQLクエリ -->
+	<!-- 既にアイテムが存在するか確認するSQLクエリ -->
+	<select id="checkItem" resultType="boolean" parameterType="map">
+		SELECT CASE WHEN EXISTS (
+		SELECT 1
+		FROM CART_ITEMS
+		WHERE CUSTOMER_ID = #{customerId} AND PRODUCT_ID = #{productId}
+		) THEN 1 ELSE 0 END
+		FROM DUAL
+	</select>
+
+
 	<update id="addQuan" parameterType="map">
 		UPDATE CART_ITEMS
-		SET QUANTITY = QUANTITY + #{quantity}
+		SET QUANTITY
+		= QUANTITY + #{quantity}
 		WHERE CUSTOMER_ID = #{customerId}
-		AND PRODUCT_ID = #{productId}
+		AND
+		PRODUCT_ID = #{productId}
 	</update>
 
-	<!-- アイテムが存在しない場合は新しく追加するSQLクエリ -->
+	<update id="updateQuan" parameterType="map">
+		UPDATE CART_ITEMS
+		SET QUANTITY
+		= QUANTITY = #{quantity}
+		WHERE CUSTOMER_ID = #{customerId}
+		AND
+		PRODUCT_ID = #{productId}
+	</update>
+
 	<insert id="insert" useGeneratedKeys="true" keyColumn="ID"
 		parameterType="map">
 		INSERT INTO CART_ITEMS
-		(ID, CUSTOMER_ID, PRODUCT_ID, QUANTITY)
+		(ID, CUSTOMER_ID, PRODUCT_ID,
+		QUANTITY)
 		VALUES
-		(CART_ITEMS_ID_SEQ.nextval, #{customerId}, #{productId}, #{quantity})
+		(CART_ITEMS_ID_SEQ.nextval, #{customerId},
+		#{productId}, #{quantity})
 	</insert>
 
 	<delete id="deleteById">
