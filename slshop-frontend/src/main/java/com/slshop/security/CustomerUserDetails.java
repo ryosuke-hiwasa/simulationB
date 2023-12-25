@@ -19,6 +19,10 @@ public class CustomerUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
+    
+    public Long getId() {
+    	return customer.getId();
+    }
 
     @Override
     public String getPassword() {

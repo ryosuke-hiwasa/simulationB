@@ -24,26 +24,32 @@
 			<result column="WEIGHT" property="weight" />
 		</association>
 
-		<association property="customer" javaType="com.slshop.common.entity.Customer">
+		<association property="customer"
+			javaType="com.slshop.common.entity.Customer">
 			<id column="C_ID" property="id" />
 			<result column="EMAIL" property="email" />
 			<result column="FIRST_NAME" property="firstName" />
 			<result column="LAST_NAME" property="lastName" />
 			<result column="PASSWORD" property="password" />
 		</association>
-		
+
 	</resultMap>
 	<select id="findAll" resultMap="cartMap">
 		SELECT * FROM CART_ITEMS
 	</select>
 
 	<insert id="insert" useGeneratedKeys="true" keyColumn="ID">
-		INSERT INTO
+		INSERT
+		INTO
 		CART_ITEMS
-		(ID,<!-- CUSTOMER_ID, -->
+		(ID,CUSTOMER_ID,
 		PRODUCT_ID,QUANTITY)
-		VALUES (CART_ITEMS_ID_SEQ.nextval,<!-- #{customerId}, -->
+		VALUES
+		(CART_ITEMS_ID_SEQ.nextval, #{customerId},
 		#{productId},#{quantity})
 	</insert>
 
+	<delete id="deleteById">
+		DELETE FROM CART_ITEMS WHERE ID = #{id}
+	</delete>
 </mapper>

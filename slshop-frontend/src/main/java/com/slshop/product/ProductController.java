@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.slshop.cart.CartService;
 import com.slshop.common.entity.CartItem;
-import com.slshop.common.entity.Customer;
 import com.slshop.common.entity.product.Product;
+import com.slshop.security.CustomerUserDetails;
 
 @Controller
 @RequestMapping("/products")
@@ -47,11 +46,11 @@ public class ProductController {
 	}
 
 	@PostMapping("/detail/{id}")
-	public String addCart(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("id") Integer productid,
+	public String addCart(@AuthenticationPrincipal CustomerUserDetails userDetails, @PathVariable("id") Integer productid,
 			@RequestParam("quantity") int quantity,Model model) {
 		Integer test =10;
+		this.cartService.insert(userDetails.getId(),productid, quantity);
 		
-		this.cartService.insert(((Customer)userDetails).getId(),productid, quantity);
 		List<CartItem> cartItem = this.cartService.findAll();
 		model.addAttribute("cartItem",cartItem);
 		return "/cart/cart";

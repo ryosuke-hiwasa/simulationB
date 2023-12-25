@@ -14,5 +14,5 @@ public interface CartMapper {
 	public void insert(Long customerId,Integer productId,int quantity);
 	public Product getProduct();
 	public Customer getCustomer();
-	
+	public void deleteById(Integer id);
 }
