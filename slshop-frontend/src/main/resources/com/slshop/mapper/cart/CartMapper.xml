@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.slshop.cart.CartMapper">
+
+	<resultMap id="cartMap"
+		type="com.slshop.common.entity.CartItem">
+		<id column="ID" property="id" />
+		<result column="CUSTOMER_ID" property="customerId" />
+		<result column="PRODUCT_ID" property="productId" />
+		<result column="QUANTITY" property="quantity" />
+	</resultMap>
+	<select id="findAll" resultMap="cartMap">
+		SELECT * FROM CART_ITEMS
+		WHERE
+		CUSTOMER_ID = #{customerId}
+	</select>
+
+<select id="getQuantity" resultType="Integer" parameterType="map">
+    SELECT QUANTITY
+    FROM CART_ITEMS
+    WHERE CUSTOMER_ID = #{customerId}
+    AND PRODUCT_ID = #{productId}
+</select>
+
+	
+	<select id="checkItem" resultType="boolean" parameterType="map">
+		SELECT CASE WHEN EXISTS (
+		SELECT 1
+		FROM CART_ITEMS
+		WHERE CUSTOMER_ID = #{customerId} AND PRODUCT_ID = #{productId}
+		) THEN 1 ELSE 0 END
+		FROM DUAL
+	</select>
+
+
+	<update id="addQuan" parameterType="map">
+		UPDATE CART_ITEMS
+		SET QUANTITY
+		= QUANTITY + #{quantity}
+		WHERE CUSTOMER_ID = #{customerId}
+		AND
+		PRODUCT_ID = #{productId}
+	</update>
+
+	<update id="updateQuan" parameterType="map">
+		UPDATE CART_ITEMS
+		SET QUANTITY = QUANTITY = #{quantity}
+		WHERE CUSTOMER_ID = #{customerId}
+		AND
+		PRODUCT_ID = #{productId}
+	</update>
+
+	<insert id="insert" useGeneratedKeys="true" keyColumn="ID"
+		parameterType="map">
+		INSERT INTO CART_ITEMS
+		(ID, CUSTOMER_ID, PRODUCT_ID,
+		QUANTITY)
+		VALUES
+		(CART_ITEMS_ID_SEQ.nextval, #{customerId},
+		#{productId}, #{quantity})
+	</insert>
+
+	<delete id="deleteById">
+		DELETE FROM CART_ITEMS WHERE ID = #{id}
+	</delete>
+</mapper>

@@ -5,12 +5,17 @@ import com.slshop.common.entity.product.Product;
 public class CartItem {
 
     private Long id;
+    
+    private Integer customerId;
+    
+    private Integer productId;
+    
 
     private Customer customer;
 
     private Product product;
 
-    private int quantity;
+    private Integer quantity;
 
     public Long getId() {
         return id;
@@ -36,11 +41,27 @@ public class CartItem {
         this.product = product;
     }
 
-    public int getQuantity() {
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+    
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 

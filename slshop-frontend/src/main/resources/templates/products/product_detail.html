@@ -1,60 +1,87 @@
 <!DOCTYPE html>
-<html
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
-  th:replace="~{layouts/base :: layout(~{::title}, ~{}, ~{}, ~{::body/content()})}"
->
-<head>
-  <title>商品詳細</title>
-</head>
-<body>
-  <!-- Contents -->
-  <section class="py-3">
-    <div class="container px-4 px-lg-5 my-3">
-      <div class="row gx-4 gx-lg-5">
-        <div class="col-md-6">
-          <img class="card-img-top mb-5 mb-md-0" th:src="@{${product.imagePath}}" alt="product image" />
-        </div>
-        <div class="col-md-6">
-          <h1 class="display-5 fw-bolder">[[${product.name}]]</h1>
-          <div class="fs-5 mb-5">
-            <span>&yen;[[${product.price}]]</span>
-          </div>
-          <p class="lead mb-5">
-            [[${product.description}]]
-          </p>
-          <div class="d-flex input-group">
-              <button type="button" class="btn btn-secondary">
-                <i class="bi bi-dash"></i>
-              </button>
-              <input type="text" class="form-control text-center" readonly style="max-width: 3rem" />
-              <button type="button" class="btn btn-secondary">
-                <i class="bi bi-plus"></i>
-              </button>
-              <button class="btn btn-outline-primary flex-shrink-0 ms-4" type="button">
-                  <i class="bi-cart-fill me-1"></i>
-                  カートに追加
-              </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	th:replace="~{layouts/base :: layout(~{::title}, ~{}, ~{}, ~{::body/content()})}">
 
-  <section class="py-3 bg-light">
-    <div class="container px-4 px-lg-5 mt-1">
-      <div class="row">
-          <div class="col-12">
-              <h3 class="fw-bolder mb-4">商品詳細</h3>
-              <ul th:each="detail : ${product.details}" th:object="${item}">
-                  <li class="py-1">
-                    <span>[[${detail.name}]]</span><span class="mx-1">:</span><span>[[${detail.value}]]</span>
-                  </li>
-              </ul>
-          </div>
-      </div>
-    </div>
-  </section>
-  <th:block th:replace="~{layouts/modal_fragments :: messageModal}" />
+<head>
+	<title>商品詳細</title>
+
+</head>
+
+<body>
+	<!-- Contents -->
+	<section class="py-3">
+		<div class="container px-4 px-lg-5 my-3">
+			<div class="row gx-4 gx-lg-5">
+				<div class="col-md-6">
+					<img class="card-img-top mb-5 mb-md-0" th:src="@{${product.imagePath}}" alt="product image" />
+				</div>
+				<div class="col-md-6">
+					<h1 class="display-5 fw-bolder">[[${product.name}]]</h1>
+					<div class="fs-5 mb-5">
+						<span>&yen;[[${product.price}]]</span>
+					</div>
+					<p class="lead mb-5">
+						[[${product.description}]]
+					</p>
+					<form th:action="@{/products/detail/{id}(id=${product.id})}" th:method="post">
+						<div class="d-flex input-group">
+							<button type="button" class="btn btn-secondary" id="btnD">
+								<i class="bi bi-dash"></i>
+							</button>
+							<input type="number" class="form-control text-center" readonly style="max-width: 3rem"
+								value="1" id="quantity" name="quantity" />
+							<button type="button" class="btn btn-secondary" id="btnU">
+								<i class="bi bi-plus"></i>
+							</button>
+							<button class="btn btn-outline-primary flex-shrink-0 ms-4" type="submit">
+								<i class="bi-cart-fill me-1"></i>
+								カートに追加
+							</button>
+						</div>
+						<input type="hidden" name="quantity" th:value="${quantity}" />
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="py-3 bg-light">
+		<div class="container px-4 px-lg-5 mt-1">
+			<div class="row">
+				<div class="col-12">
+					<h3 class="fw-bolder mb-4">商品詳細</h3>
+					<ul th:each="detail : ${product.details}" th:object="${item}">
+						<li class="py-1">
+							<span>[[${detail.name}]]</span><span class="mx-1">:</span><span>[[${detail.value}]]</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+	<th:block th:replace="~{layouts/modal_fragments :: messageModal}" />
+
+	<script type="text/javascript">
+		document.getElementById('btnD').addEventListener('click', function () {
+			updateQuantity(-1);
+		});
+
+		document.getElementById('btnU').addEventListener('click', function () {
+			updateQuantity(1);
+		});
+
+		function updateQuantity(change) {
+			var quantityField = document.getElementById('quantity');
+			var currentQuantity = parseInt(quantityField.value);
+			var newQuantity = currentQuantity + change;
+
+			if (newQuantity >= 1 && newQuantity <= 10) {
+				quantityField.value = newQuantity;
+			}
+		}
+	</script>
+
+	
 </body>
+
 </html>
