@@ -11,28 +11,6 @@
 		<result column="CUSTOMER_ID" property="customerId" />
 		<result column="PRODUCT_ID" property="productId" />
 		<result column="QUANTITY" property="quantity" />
-		<association property="product"
-			javaType="com.slshop.common.entity.product.Product">
-			<id column="P_ID" property="id" />
-			<result column="P_NAME" property="name" />
-			<result column="DESCRIPTION" property="description" />
-			<result column="IMAGE" property="image" />
-			<result column="PRICE" property="price" />
-			<result column="LENGTH" property="length" />
-			<result column="WIDTH" property="width" />
-			<result column="HEIGHT" property="height" />
-			<result column="WEIGHT" property="weight" />
-		</association>
-
-		<association property="customer"
-			javaType="com.slshop.common.entity.Customer">
-			<id column="C_ID" property="id" />
-			<result column="EMAIL" property="email" />
-			<result column="FIRST_NAME" property="firstName" />
-			<result column="LAST_NAME" property="lastName" />
-			<result column="PASSWORD" property="password" />
-		</association>
-
 	</resultMap>
 	<select id="findAll" resultMap="cartMap">
 		SELECT * FROM CART_ITEMS
@@ -40,11 +18,12 @@
 		CUSTOMER_ID = #{customerId}
 	</select>
 
-	<select id="getQuantity" resultMap="cartMap" resultType="int">
-		SELECT QUANTITY FROM CART_ITEMS
-		WHERE
-		CUSTOMER_ID = #{customerId}
-	</select>
+<select id="getQuantity" resultType="int" parameterType="map">
+    SELECT QUANTITY
+    FROM CART_ITEMS
+    WHERE CUSTOMER_ID = #{customerId}
+    AND PRODUCT_ID = #{productId}
+</select>
 
 	<!-- 既にアイテムが存在するか確認するSQLクエリ -->
 	<select id="checkItem" resultType="boolean" parameterType="map">
@@ -68,8 +47,7 @@
 
 	<update id="updateQuan" parameterType="map">
 		UPDATE CART_ITEMS
-		SET QUANTITY
-		= QUANTITY = #{quantity}
+		SET QUANTITY = QUANTITY = #{quantity}
 		WHERE CUSTOMER_ID = #{customerId}
 		AND
 		PRODUCT_ID = #{productId}

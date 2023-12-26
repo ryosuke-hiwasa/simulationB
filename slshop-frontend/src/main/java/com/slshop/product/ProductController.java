@@ -1,6 +1,8 @@
 package com.slshop.product;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -47,22 +49,25 @@ public class ProductController {
 
 	@PostMapping("/detail/{id}")
 	public String addCart(@AuthenticationPrincipal CustomerUserDetails userDetails, @PathVariable("id") Long productId,
-			@RequestParam("quantity") int quantity, RedirectAttributes ra) {
+			@RequestParam("quantity") int cartQuantity, RedirectAttributes ra) {
 
-		if (this.cartService.getQuantity(productId) <= 0) {
-			this.cartService.insert(userDetails.getId(), productId, quantity);
-		}
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("customerId", userDetails.getId());
+		paramMap.put("productId", productId);
+		int currentQuantity = this.cartService.getQuantity(paramMap);
 
-		if (this.cartService.getQuantity(productId) + quantity < 10) {
+		if (currentQuantity + cartQuantity > 10) {
 			ra.addFlashAttribute("message",
-					"カートに商品を追加できませんでした｡最大数量は10個です(カート内:" + this.cartService.getQuantity(productId) + "個)");
+					"カートに商品を追加できませんでした｡最大数量は10個です(カート内:" + currentQuantity + "個)");
 			return "redirect:/cart";
 		}
 
 		if (this.cartService.checkItem(userDetails.getId(), productId)) {
-			this.cartService.addQuan(userDetails.getId(), productId, quantity);
+			this.cartService.addQuan(userDetails.getId(), productId, cartQuantity);
+		} else {
+			this.cartService.insert(userDetails.getId(), productId, cartQuantity);
 		}
-		ra.addFlashAttribute("message", "カートに商品を追加しました(" + quantity + ")個");
+		ra.addFlashAttribute("message", "カートに商品を追加しました(" + cartQuantity + "個)");
 		return "redirect:/cart";
 	}
 }

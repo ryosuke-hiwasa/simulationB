@@ -1,6 +1,7 @@
 package com.slshop.cart;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,8 +42,8 @@ public class CartService {
 		this.cartMapper.deleteById(id);
 	}
 	
-	public int getQuantity(Long productId) {
-		return this.cartMapper.getQuantity(productId);
+	public int getQuantity(Map<String, Object> paramMap) {
+	    return this.cartMapper.getQuantity(paramMap);
 	}
 	
 }

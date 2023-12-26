@@ -1,6 +1,7 @@
 package com.slshop.cart;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -18,5 +19,5 @@ public interface CartMapper {
 	public boolean checkItem(Long customerId,Long productId);
 	public void addQuan(Long customerId,Long productId,int quantity);
 	public void updateQuan(Long customerId,Long productId,int quantity);
-	public int getQuantity(Long productId);
+	public int getQuantity(Map<String, Object> paramMap);
 }
