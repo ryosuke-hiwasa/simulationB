@@ -15,7 +15,7 @@ public class CartItem {
 
     private Product product;
 
-    private int quantity;
+    private Integer quantity;
 
     public Long getId() {
         return id;
@@ -57,11 +57,11 @@ public class CartItem {
         this.productId = productId;
     }
     
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 

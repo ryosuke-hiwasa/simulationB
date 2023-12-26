@@ -18,14 +18,14 @@
 		CUSTOMER_ID = #{customerId}
 	</select>
 
-<select id="getQuantity" resultType="int" parameterType="map">
+<select id="getQuantity" resultType="Integer" parameterType="map">
     SELECT QUANTITY
     FROM CART_ITEMS
     WHERE CUSTOMER_ID = #{customerId}
     AND PRODUCT_ID = #{productId}
 </select>
 
-	<!-- 既にアイテムが存在するか確認するSQLクエリ -->
+	
 	<select id="checkItem" resultType="boolean" parameterType="map">
 		SELECT CASE WHEN EXISTS (
 		SELECT 1

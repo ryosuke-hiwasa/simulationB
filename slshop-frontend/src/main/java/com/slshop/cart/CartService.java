@@ -21,15 +21,15 @@ public class CartService {
 		return cartMapper.findAll(customerId);
 	}
 
-	public void insert(Long customerId,Long productId, int quantity) {
+	public void insert(Long customerId,Long productId, Integer quantity) {
 		this.cartMapper.insert(customerId,productId, quantity);
 	};
 	
-	public void addQuan(Long customerId,Long productId, int quantity) {
+	public void addQuan(Long customerId,Long productId, Integer quantity) {
 		this.cartMapper.addQuan(customerId,productId, quantity);
 	};
 	
-	public void updateQuan(Long customerId,Long productId, int quantity) {
+	public void updateQuan(Long customerId,Long productId, Integer quantity) {
 		this.cartMapper.updateQuan(customerId,productId, quantity);
 	};
 	
@@ -42,7 +42,7 @@ public class CartService {
 		this.cartMapper.deleteById(id);
 	}
 	
-	public int getQuantity(Map<String, Object> paramMap) {
+	public Integer getQuantity(Map<String, Object> paramMap) {
 	    return this.cartMapper.getQuantity(paramMap);
 	}
 	

@@ -1,40 +1,74 @@
 <!DOCTYPE html>
-<html
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
-  th:replace="~{layouts/base :: layout(~{::title}, ~{}, ~{}, ~{::body/content()})}"
->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	th:replace="~{layouts/base :: layout(~{::title}, ~{}, ~{}, ~{::body/content()})}">
+
 <head>
-  <title>商品一覧</title>
+	<title>商品一覧</title>
 </head>
+
 <body>
-  <!-- Contents -->
-  <section class="py-3">
-    <div class="container px-4 px-lg-5 my-3">
-      <h2>仮ページ 動作確認用</h2>
-      <table class="table align-middle">
-        <thead>
-          <tr class="text-center">
-            <th>ID</th>
-            <th style="width:20%">商品画像</th>
-            <th>商品名</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="text-center" th:each="product : ${products}">
-            <td>[[${product.id}]]</td>
-            <td>
-              <img class="img-fluid mx-auto d-block" th:src="@{${product.imagePath}}">
-            </td>
-            <td>[[${product.name}]]</td>
-            <td>
-              <a th:href="@{/products/detail/{id}(id=${product.id})}">詳細リンク</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+		style="display: none;">
+		Launch demo modal
+	</button>
+	<!-- Contents -->
+	<section class="py-3">
+		<div class="container px-4 px-lg-5 my-3">
+			<h2>仮ページ 動作確認用</h2>
+			<table class="table align-middle">
+				<thead>
+					<tr class="text-center">
+						<th>ID</th>
+						<th style="width:20%">商品画像</th>
+						<th>商品名</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="text-center" th:each="product : ${products}">
+						<td>[[${product.id}]]</td>
+						<td>
+							<img class="img-fluid mx-auto d-block" th:src="@{${product.imagePath}}">
+						</td>
+						<td>[[${product.name}]]</td>
+						<td>
+							<a th:href="@{/products/detail/{id}(id=${product.id})}">詳細リンク</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</section>
+	<script type="text/javascript">
+
+		document.addEventListener('DOMContentLoaded', function () {
+			var message = document.querySelector('.modal-body p').textContent.trim();
+			if (message !== '') {
+				var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+				myModal.show();
+			}
+		});
+
+	</script>
+
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p th:text="${message}"></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
+
 </html>

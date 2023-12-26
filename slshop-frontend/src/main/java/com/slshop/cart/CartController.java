@@ -1,8 +1,6 @@
 package com.slshop.cart;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -46,23 +44,9 @@ public class CartController {
 
 	@PostMapping("/update/{id}")
 	public String update(@AuthenticationPrincipal CustomerUserDetails userDetails, @PathVariable("id") Long productId,
-			@RequestParam("quantity") int cartQuantity, RedirectAttributes ra) {
+			@RequestParam("quantity") Integer cartQuantity, RedirectAttributes ra) {
 
-		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("customerId", userDetails.getId());
-		paramMap.put("productId", productId);
 
-		int currentQuantity = this.cartService.getQuantity(paramMap);
-
-//		if (currentQuantity > cartQuantity) {
-//			this.cartService.updateQuan(userDetails.getId(), productId, cartQuantity);
-//		} else if (currentQuantity < cartQuantity && currentQuantity + cartQuantity > 10) {
-//			this.cartService.addQuan(userDetails.getId(), productId, cartQuantity);
-//		} else {
-//			ra.addFlashAttribute("message",
-//					"カートに商品を追加できませんでした｡最大数量は10個です(カート内:" + currentQuantity + "個)");
-//			return "redirect:/cart";
-//		}
 
 		return "redirect:/cart";
 	}

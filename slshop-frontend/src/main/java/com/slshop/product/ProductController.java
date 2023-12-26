@@ -49,25 +49,33 @@ public class ProductController {
 
 	@PostMapping("/detail/{id}")
 	public String addCart(@AuthenticationPrincipal CustomerUserDetails userDetails, @PathVariable("id") Long productId,
-			@RequestParam("quantity") int cartQuantity, RedirectAttributes ra) {
+			@RequestParam("quantity") Integer cartQuantity, RedirectAttributes ra) {
+
+		if (userDetails == null) {
+			ra.addFlashAttribute("message", "ログインしてください");
+			return "redirect:/products";
+		}
 
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("customerId", userDetails.getId());
 		paramMap.put("productId", productId);
-		int currentQuantity = this.cartService.getQuantity(paramMap);
+		Integer currentQuantity = this.cartService.getQuantity(paramMap);
 
-		if (currentQuantity + cartQuantity > 10) {
+		if (currentQuantity == null) {
+			this.cartService.insert(userDetails.getId(), productId, cartQuantity);
+			ra.addFlashAttribute("message", "カートに商品を追加しました(現在数量:" + cartQuantity + "個)");
+			return "redirect:/cart";
+
+		} else if (currentQuantity + cartQuantity > 10) {
 			ra.addFlashAttribute("message",
 					"カートに商品を追加できませんでした｡最大数量は10個です(カート内:" + currentQuantity + "個)");
 			return "redirect:/cart";
-		}
 
-		if (this.cartService.checkItem(userDetails.getId(), productId)) {
-			this.cartService.addQuan(userDetails.getId(), productId, cartQuantity);
 		} else {
-			this.cartService.insert(userDetails.getId(), productId, cartQuantity);
+			this.cartService.addQuan(userDetails.getId(), productId, cartQuantity);
+			ra.addFlashAttribute("message", "カートに商品を追加しました(現在数量:" + (cartQuantity + currentQuantity) + "個)");
+			return "redirect:/cart";
+
 		}
-		ra.addFlashAttribute("message", "カートに商品を追加しました(" + cartQuantity + "個)");
-		return "redirect:/cart";
 	}
 }
