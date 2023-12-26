@@ -11,30 +11,68 @@
 		<result column="CUSTOMER_ID" property="customerId" />
 		<result column="PRODUCT_ID" property="productId" />
 		<result column="QUANTITY" property="quantity" />
+
+		<association property="product"
+			javaType="com.slshop.common.entity.product.Product">
+			<id column="P_ID" property="id" />
+			<result column="NAME" property="name" />
+			<result column="PRICE" property="price" />
+		</association>
+
 	</resultMap>
 	<select id="findAll" resultMap="cartMap">
-		SELECT * FROM CART_ITEMS
+		SELECT
+			ci.ID,
+			ci.CUSTOMER_ID,
+			ci.PRODUCT_ID,
+			ci.QUANTITY,
+			p.ID AS P_ID,
+			p.NAME,
+			p.PRICE
+		FROM
+			CART_ITEMS ci
+		JOIN
+			PRODUCTS p ON ci.PRODUCT_ID = p.ID
 		WHERE
-		CUSTOMER_ID = #{customerId}
+			ci.CUSTOMER_ID = #{customerId}
 	</select>
 
-<select id="getQuantity" resultType="Integer" parameterType="map">
-    SELECT QUANTITY
-    FROM CART_ITEMS
-    WHERE CUSTOMER_ID = #{customerId}
-    AND PRODUCT_ID = #{productId}
-</select>
+	<select id="getQuantity" resultType="Integer"
+		parameterType="map">
+		SELECT QUANTITY
+		FROM CART_ITEMS
+		WHERE CUSTOMER_ID =
+		#{customerId}
+		AND PRODUCT_ID = #{productId}
+	</select>
 
-	
 	<select id="checkItem" resultType="boolean" parameterType="map">
 		SELECT CASE WHEN EXISTS (
 		SELECT 1
 		FROM CART_ITEMS
-		WHERE CUSTOMER_ID = #{customerId} AND PRODUCT_ID = #{productId}
+		WHERE CUSTOMER_ID =
+		#{customerId} AND PRODUCT_ID = #{productId}
 		) THEN 1 ELSE 0 END
-		FROM DUAL
+		FROM
+		DUAL
 	</select>
 
+	<select id="getProduct" resultMap="cartMap">
+		SELECT
+			ci.ID,
+			ci.CUSTOMER_ID,
+			ci.PRODUCT_ID,
+			ci.QUANTITY,
+			p.ID AS P_ID,
+			p.NAME,
+			p.PRICE
+		FROM
+			CART_ITEMS ci
+		JOIN
+			PRODUCTS p ON ci.PRODUCT_ID = p.ID
+		WHERE
+			ci.CUSTOMER_ID = #{customerId}
+	</select>
 
 	<update id="addQuan" parameterType="map">
 		UPDATE CART_ITEMS
@@ -47,7 +85,8 @@
 
 	<update id="updateQuan" parameterType="map">
 		UPDATE CART_ITEMS
-		SET QUANTITY = QUANTITY = #{quantity}
+		SET
+		QUANTITY = QUANTITY = #{quantity}
 		WHERE CUSTOMER_ID = #{customerId}
 		AND
 		PRODUCT_ID = #{productId}
