@@ -1,115 +1,114 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
-	th:replace="~{layouts/base :: layout(~{::title}, ~{}, ~{}, ~{::body/content()})}">
-
-<head>
-	<meta charset="UTF-8">
-	<title>商品カート</title>
-</head>
-
-<body>
-	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-		style="display: none;">
-		Launch demo modal
-	</button>
-	<section class="py-3">
-		<div class="container px-4 px-lg-5 my-3">
-
-			<table class="table align-middle" th:if="${not #lists.isEmpty(cartItem)}">
-				<thead>
-					<tr class="text-center">
-						<th></th>
-						<th>#</th>
-						<th style="width:20%">商品画像</th>
-						<th>商品名</th>
-						<th>単価</th>
-						<th>数量</th>
-						<th>小計</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr class="text-center" th:each="item : ${cartItem}">
-						<td>
-							<form th:action="@{/cart/delete/{id}(id=${item.id})}" th:method="post">
-								<input type="submit" value="削除">
-							</form>
-						</td>
-						<td th:text="${item.id}"></td>
-						<td><img class="img-fluid mx-auto d-block" th:src="@{/images/no-image-300.png}"></td>
-						<td>[[${item.product.name}]]</td>
-						<td>\[[${item.product.price}]]</td>
-						<td>
-							<div class="d-flex input-group">
-								<button type="button" class="btn btn-secondary" id="btnD">
-									<i class="bi bi-dash"></i>
-								</button>
-								<input type="number" class="form-control text-center" readonly style="max-width: 4rem"
-									th:value="${item.quantity}" id="quantity" name="quantity" />
-								<button type="button" class="btn btn-secondary" id="btnU">
-									<i class="bi bi-plus"></i>
-								</button>
+	<!DOCTYPE html>
+	<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+		th:replace="~{layouts/base :: layout(~{::title}, ~{}, ~{}, ~{::body/content()})}">
+	
+	<head>
+		<meta charset="UTF-8">
+		<title>商品カート</title>
+	</head>
+	
+	<body>
+		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+			style="display: none;">
+			Launch demo modal
+		</button>
+		<section class="py-3">
+			<div class="container px-4 px-lg-5 my-3">
+	
+				<table class="table align-middle" th:if="${not #lists.isEmpty(cartItem)}">
+					<thead>
+						<tr class="text-center">
+							<th></th>
+							<th>#</th>
+							<th style="width:20%">商品画像</th>
+							<th>商品名</th>
+							<th>単価</th>
+							<th>数量</th>
+							<th>小計</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="text-center" th:each="item,statuNo : ${cartItem}">
+							<td>
+								<form th:action="@{/cart/delete/{id}(id=${item.id})}" th:method="post">
+									<input type="submit" value="削除">
+								</form>
+							</td>
+							<td th:text="${statuNo.index+1}"></td>
+							<td><img class="img-fluid mx-auto d-block" th:src="@{/images/no-image-300.png}"></td>
+							<td>[[${item.product.name}]]</td>
+							<td id="productPrice" th:data-product-name="${item.product.price}">\[[${item.product.price}]]
+							</td>
+							<td>
+								<div class="d-flex input-group">
+									<button type="button" class="btn btn-secondary" id="minusBtn" onclick="updateQuantity(-1,this)">
+										<i class="bi bi-dash"></i>
+									</button>
+									<input type="number" class="form-control text-center" readonly style="max-width: 4rem"
+										th:value="${item.quantity}" id="quantity" name="quantity" />
+									<button type="button" class="btn btn-secondary" id="pulsBtn" onclick="updateQuantity(1,this)">
+										<i class="bi bi-plus"></i>
+									</button>
+								</div>
+							</td>
+							<td class="subtotal">[[${item.product.price * item.quantity}]]</td>
+						</tr>
+					</tbody>
+				</table>
+				<div th:unless="${not #lists.isEmpty(cartItem)}">
+					<section class="py-5">
+						<div class="text-center container">
+							<div class="row">
+								<h1 class="fw-light">カートは空です</h1>
 							</div>
-						</td>
-						<td>[[${item.product.price * item.quantity}]]</td>
-					</tr>
-				</tbody>
-			</table>
-			<div th:unless="${not #lists.isEmpty(cartItem)}">
-				<section class="py-5">
-					<div class="text-center container">
-						<div class="row">
-							<h1 class="fw-light">カートは空です</h1>
 						</div>
+					</section>
+				</div>
+			</div>
+		</section>
+		<script type="text/javascript">
+			function updateQuantity(change,button) {
+				var quantityField = button.parentElement.querySelector('input[type="number"]');
+				var currentQuantity = parseInt(quantityField.value);
+				var newQuantity = currentQuantity + change;
+	
+				console.log(quantityField);
+				if (newQuantity >= 1 && newQuantity <= 10) {
+					quantityField.value = newQuantity;
+	
+	
+					var itemPrice = parseFloat(document.getElementById('productPrice').getAttribute('data-product-name'));
+					var subtotal = document.querySelector('.subtotal');
+					var newTotal = itemPrice * newQuantity;
+					subtotal.textContent = newTotal.toFixed();
+				}
+			}
+			document.addEventListener('DOMContentLoaded', function () {
+				var message = document.querySelector('.modal-body p').textContent.trim();
+				if (message && message !== '') {
+					var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+					myModal.show();
+				}
+			});
+		</script>
+	
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="exampleModalLabel">商品数量変更</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
-				</section>
-			</div>
-		</div>
-	</section>
-	<script type="text/javascript">
-		document.getElementById('btnD').addEventListener('click', function () {
-			updateQuantity(-1);
-		});
-
-		document.getElementById('btnU').addEventListener('click', function () {
-			updateQuantity(1);
-		});
-
-		function updateQuantity(change) {
-			var quantityField = document.getElementById('quantity');
-			var currentQuantity = parseInt(quantityField.value);
-			var newQuantity = currentQuantity + change;
-
-			if (newQuantity >= 1 && newQuantity <= 10) {
-				quantityField.value = newQuantity;
-			}
-		}
-		document.addEventListener('DOMContentLoaded', function () {
-			var message = document.querySelector('.modal-body p').textContent.trim();
-			if (message && message !== '') {
-				var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-				myModal.show();
-			}
-		});
-	</script>
-
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<p th:text="${message}"></p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
+					<div class="modal-body">
+						<p th:text="${message}"></p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</body>
-
-</html>
+	</body>
+	
+	</html>
