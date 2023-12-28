@@ -9,9 +9,7 @@
 </head>
 
 <style>
-	cartSum {
-		display: flexbox;
-	}
+
 </style>
 
 <body>
@@ -20,7 +18,8 @@
 		style="display: none;">
 	</button>
 	<section class="py-3">
-		<div class="container px-4 px-lg-5 my-3">
+
+		<div class="container px-4 px-lg-5 my-3 d-flex mb-3 ">
 
 			<table class="table align-middle" th:if="${not #lists.isEmpty(cartItem)}">
 				<thead>
@@ -44,7 +43,8 @@
 						<td th:text="${statuNo.index+1}"></td>
 						<td><img class="img-fluid mx-auto d-block" th:src="@{/images/no-image-300.png}"></td>
 						<td>[[${item.product.name}]]</td>
-						<td id="productPrice" th:data-product-name="${item.product.price}">\[[${item.product.price}]]
+						<td id="productPrice" th:data-product-name="${item.product.price}">
+							\[[${item.product.price}]]
 						</td>
 						<td>
 							<div class="d-flex input-group">
@@ -64,6 +64,7 @@
 					</tr>
 				</tbody>
 			</table>
+
 			<div th:unless="${not #lists.isEmpty(cartItem)}">
 				<section class="py-5">
 					<div class="text-center container">
@@ -73,6 +74,23 @@
 					</div>
 				</section>
 			</div>
+
+			<table class="table align-middle" th:if="${not #lists.isEmpty(cartItem)}">
+				<thead>
+					<tr class="text-center" bgcolor="#F4F3F7">
+						<th>カート内合計</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tfoot>
+					<td>合計</td>
+					<td class="total"></td>
+					<td> <button class="btn btn-outline-primary flex-shrink-0 ms-4" type="submit">
+							<i class="bi-cart-fill me-1"></i>
+							レジに進む
+						</button></td>
+				</tfoot>
+			</table>
 		</div>
 	</section>
 
@@ -84,36 +102,48 @@
 
 			console.log(quantityField);
 			if (newQuantity >= 1 && newQuantity <= 10) {
-				/*
+
 				quantityField.value = newQuantity;
 
 				var rows = document.querySelectorAll('.table tbody tr');
 				var total = 0;
+
 				rows.forEach(function (row) {
-					
 					var itemQuantity = parseInt(row.querySelector('.form-control').value);
 					var itemPrice = parseFloat(row.querySelector('#productPrice').getAttribute('data-product-name'));
-					
 					var subtotal = itemQuantity * itemPrice;
 					row.querySelector('.subtotal').textContent = subtotal.toFixed();
-					
 					total += subtotal;
-					*/
-					quantityField.value = newQuantity;
-					var itemPrice = parseFloat(document.getElementById('productPrice').getAttribute('data-product-name'));
-					var subtotal = document.querySelector('.subtotal');
-					var newTotal = itemPrice * newQuantity;
-					subtotal.textContent = newTotal.toFixed();
-					
-				}
+				});
+				console.log(total);
+				var totalCell = document.querySelector('.total');
+				totalCell.textContent = total.toFixed();
+			}
+
 		}
-			document.addEventListener('DOMContentLoaded', function () {
-				var message = document.querySelector('.modal-body p').textContent.trim();
-				if (message && message !== '') {
-					var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-					myModal.show();
-				}
+		document.addEventListener('DOMContentLoaded', function () {
+
+			var rows = document.querySelectorAll('.table tbody tr');
+			var total = 0;
+
+			rows.forEach(function (row) {
+				var itemQuantity = parseInt(row.querySelector('.form-control').value);
+				var itemPrice = parseFloat(row.querySelector('#productPrice').getAttribute('data-product-name'));
+				var subtotal = itemQuantity * itemPrice;
+				row.querySelector('.subtotal').textContent = subtotal.toFixed();
+				total += subtotal;
 			});
+			console.log(total);
+			var totalCell = document.querySelector('.total');
+			totalCell.textContent = total.toFixed();
+
+
+			var message = document.querySelector('.modal-body p').textContent.trim();
+			if (message && message !== '') {
+				var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+				myModal.show();
+			}
+		});
 	</script>
 
 	<!-- Modal -->
